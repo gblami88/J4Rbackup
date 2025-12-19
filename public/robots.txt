@@ -1,0 +1,9 @@
+# Allow all search engines to crawl everything
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://syncopsai.com/sitemap.xml
+
+# No crawl delay - we want fast indexing
+# Crawl-delay: 0
