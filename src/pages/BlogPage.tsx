@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { supabase } from '../lib/supabase';
 
 interface BlogPost {
   id: string;
@@ -13,37 +12,27 @@ interface BlogPost {
   published_at: string;
 }
 
+const BLOG_POSTS: BlogPost[] = [
+  {
+    id: "43205fab-b669-4e1c-9eb1-27531465966e",
+    title: "Imagine Flipping a Switch",
+    slug: "imagine-flipping-a-switch",
+    overview: "Direct response marketing gets you in front of more local clients ready to buy.",
+    content: "What if getting more customers was as simple as flipping a switch?\n\nNo more guessing which ads work.\n\nNo more throwing money at platforms and hoping something sticks.\n\nNo more wondering if anyone will even see your business.\n\nJust flip the switch, and customers start finding you.\n\nThat's what proper marketing does.\n\nDirect response marketing gets you in front of more local clients ready to buy.\n\nNot tire-kickers. Not maybes. Real people with real problems that your business solves, who are actively looking for someone like you right now.\n\nHere's what that looks like:\n\nSomeone searches for your service on Google. Your business shows up first. They click. They call. They book.\n\nNo complicated sales pitch is needed. They already want what you offer. You just made it easy for them to find you.\n\nThat's the switch.\n\nMost local businesses never flip it because they think marketing is complicated, expensive, or something only big companies can afford.\n\nBut here's the truth:\n\nThe businesses dominating your local market aren't spending more money than you. They're just spending it smarter.\n\nThey know exactly which platforms work for their industry. They know what messages get people to take action. And they've built systems that bring in customers consistently, not randomly.\n\nYou can have that too.\n\nThe difference between struggling to get customers and having more than you can handle? It's not luck. It's not connections. It's just knowing how to flip the switch.\n\nWant us to show you how? Get your FREE marketing analysis, and we'll map out exactly what's working in your market and how to tap into it.\n\nFlip the switch.\n\nTalk soon\n\n— Lamin\n\nHelping local businesses get found online and fill their calendars with customers.",
+    author: "Lamin",
+    author_description: "Helping local businesses get found online and fill their calendars with customers.",
+    published_at: "2025-12-19T11:25:00.160178Z"
+  }
+];
+
 const BlogPage: React.FC = () => {
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
 
   const cardStyles = [
     { bgGradient: "from-blue-50 to-blue-100" },
     { bgGradient: "from-green-50 to-green-100" },
     { bgGradient: "from-orange-50 to-orange-100" }
   ];
-
-  useEffect(() => {
-    fetchBlogPosts();
-  }, []);
-
-  const fetchBlogPosts = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('blog_posts')
-        .select('*')
-        .eq('published', true)
-        .order('published_at', { ascending: false });
-
-      if (error) throw error;
-      setBlogPosts(data || []);
-    } catch (error) {
-      console.error('Error fetching blog posts:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const togglePost = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -77,17 +66,8 @@ const BlogPage: React.FC = () => {
       </div>
 
       <div className="max-w-4xl">
-        {loading ? (
-          <div className="text-center py-12">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-black border-r-transparent"></div>
-          </div>
-        ) : blogPosts.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-xl text-gray-600">No blog posts yet. Check back soon!</p>
-          </div>
-        ) : (
-          <div className="space-y-6">
-            {blogPosts.map((post, index) => {
+        <div className="space-y-6">
+          {BLOG_POSTS.map((post, index) => {
               const style = cardStyles[index % cardStyles.length];
               return (
               <article
@@ -120,7 +100,7 @@ const BlogPage: React.FC = () => {
                     aria-expanded={openIndex === index}
                     aria-controls={`post-content-${index}`}
                   >
-                    <span>{openIndex === index ? 'Read less' : 'Read more'}</span>
+                    <span>{openIndex === index ? 'Read less' : 'Learn More'}</span>
                     <ChevronDown
                       className={`w-5 h-5 transition-transform duration-200 ${
                         openIndex === index ? 'transform rotate-180' : ''
@@ -157,9 +137,8 @@ const BlogPage: React.FC = () => {
                 </div>
               </article>
             );
-            })}
-          </div>
-        )}
+          })}
+        </div>
       </div>
     </div>
   );
